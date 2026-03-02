@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuéntanos sobre tu negocio — Cuestionario inicial</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #4A6CF7;
+    --primary-light: #EEF2FF;
+    --primary-dark: #3451DB;
+    --bg: #F0F2F5;
+    --card: #FFFFFF;
+    --text: #1A1A2E;
+    --text-secondary: #6B7280;
+    --border: #E5E7EB;
+    --success: #10B981;
+    --success-light: #D1FAE5;
+    --error: #EF4444;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .form-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px 100px;
+  }
+
+  /* Header */
+  .form-header {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 40px 36px;
+    margin-bottom: 12px;
+    border-top: 5px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+  }
+  .form-header::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle at top right, rgba(74,108,247,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .form-header h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .form-header p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .form-header .time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 6px 14px;
+    background: var(--primary-light);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--primary);
+  }
+
+  /* Progress */
+  .progress-wrapper {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 24px;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .progress-info span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .progress-info .section-label {
+    color: var(--primary);
+  }
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #818CF8);
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Section */
+  .section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 36px;
+    margin-bottom: 12px;
+    border-left: 4px solid var(--primary);
+  }
+  .section-title-card h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-title-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 36px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.2s;
+    border: 1.5px solid transparent;
+  }
+  .question-card:focus-within {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+  }
+  .question-card.has-error {
+    border-color: var(--error);
+  }
+  .question-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .question-label .required {
+    color: var(--error);
+    margin-left: 3px;
+    font-weight: 700;
+  }
+  .question-hint {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+  .error-msg {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 6px;
+    display: none;
+  }
+  .has-error .error-msg { display: block; }
+
+  /* Inputs */
+  input[type="text"], input[type="email"], input[type="url"], textarea, select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: #FAFBFC;
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--primary);
+    background: white;
+  }
+  textarea { resize: vertical; min-height: 90px; }
+  select { cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  /* Radio & Checkbox */
+  .option-group { display: flex; flex-direction: column; gap: 8px; }
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 14px;
+  }
+  .option-item:hover { background: var(--primary-light); }
+  .option-item input[type="radio"],
+  .option-item input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* Navigation */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 12px;
+  }
+  .btn {
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(74,108,247,0.3); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--primary); background: var(--primary-light); }
+  .btn-submit {
+    background: var(--success);
+    color: white;
+    padding: 14px 36px;
+    font-size: 15px;
+  }
+  .btn-submit:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+
+  /* Confirmation */
+  .confirmation {
+    display: none;
+    text-align: center;
+    padding: 60px 36px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+  }
+  .confirmation.active { display: block; animation: fadeIn 0.5s ease; }
+  .confirmation .check-icon {
+    width: 80px; height: 80px;
+    background: var(--success-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 40px;
+  }
+  .confirmation h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .confirmation p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 440px;
+    margin: 0 auto 24px;
+  }
+
+  /* Summary */
+  .summary-section {
+    text-align: left;
+    margin-top: 32px;
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+  }
+  .summary-section h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .summary-group {
+    margin-bottom: 20px;
+  }
+  .summary-group h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--primary-light);
+  }
+  .summary-item {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid #F3F4F6;
+    font-size: 14px;
+  }
+  .summary-item:last-child { border-bottom: none; }
+  .summary-item .s-label {
+    color: var(--text-secondary);
+    min-width: 200px;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  .summary-item .s-value {
+    color: var(--text);
+    font-weight: 400;
+  }
+  .summary-item .s-value.empty {
+    color: #D1D5DB;
+    font-style: italic;
+  }
+
+  .btn-restart {
+    background: var(--primary-light);
+    color: var(--primary);
+    margin-top: 24px;
+  }
+  .btn-restart:hover { background: #DDE4FF; }
+
+  /* ===== MOBILE RESPONSIVE ===== */
+  @media (max-width: 600px) {
+
+    /* Contenedor principal */
+    .form-container {
+      padding: 10px 10px 110px;
+    }
+
+    /* Header */
+    .form-header {
+      padding: 20px 16px 22px;
+    }
+    .form-header h1 {
+      font-size: 20px;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+    .form-header p {
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .form-header .time-badge {
+      font-size: 12px;
+      padding: 5px 12px;
+      margin-top: 12px;
+    }
+
+    /* Barra de progreso */
+    .progress-wrapper {
+      padding: 12px 14px;
+      top: 4px;
+      border-radius: 10px;
+    }
+    .progress-info span {
+      font-size: 11.5px;
+    }
+    .progress-bar {
+      height: 5px;
+    }
+
+    /* Tarjeta de título de sección */
+    .section-title-card {
+      padding: 16px 16px;
+      margin-bottom: 10px;
+    }
+    .section-title-card h2 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .section-title-card p {
+      font-size: 13px;
+    }
+
+    /* Tarjetas de preguntas */
+    .question-card {
+      padding: 16px 16px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+    .question-label {
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .question-hint {
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+    .error-msg {
+      font-size: 12px;
+    }
+
+    /* Inputs, textarea y select — font-size 16px evita el zoom en iOS */
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    textarea,
+    select {
+      font-size: 16px;
+      padding: 11px 12px;
+      border-radius: 7px;
+    }
+    textarea {
+      min-height: 80px;
+    }
+
+    /* Opciones de radio y checkbox */
+    .option-group {
+      gap: 7px;
+    }
+    .option-item {
+      padding: 10px 12px;
+      font-size: 14px;
+      border-radius: 7px;
+      /* Área táctil mínima recomendada */
+      min-height: 44px;
+    }
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Botones de navegación */
+    .nav-buttons {
+      gap: 8px;
+      margin-top: 16px;
+      /* Sticky en la parte inferior para fácil acceso */
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 12px 14px;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+      z-index: 200;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      padding: 13px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      min-height: 48px;
+      justify-content: center;
+    }
+    .btn-secondary {
+      flex: 1;
+    }
+    .btn-primary {
+      flex: 2;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 15px;
+      border-radius: 8px;
+      justify-content: center;
+    }
+
+    /* Pantalla de confirmación */
+    .confirmation {
+      padding: 32px 16px 40px;
+      border-radius: 10px;
+    }
+    .confirmation .check-icon {
+      width: 68px;
+      height: 68px;
+      font-size: 34px;
+      margin-bottom: 18px;
+    }
+    .confirmation h2 {
+      font-size: 19px;
+      line-height: 1.3;
+    }
+    .confirmation p {
+      font-size: 13.5px;
+    }
+
+    /* Resumen final */
+    .summary-section {
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+    .summary-section h3 {
+      font-size: 16px;
+    }
+    .summary-item {
+      flex-direction: column;
+      gap: 2px;
+      padding: 8px 0;
+    }
+    .summary-item .s-label {
+      min-width: auto;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .summary-item .s-value {
+      font-size: 13.5px;
+    }
+
+    .btn-restart {
+      width: 100%;
+      justify-content: center;
+      margin-top: 20px;
+      padding: 13px 20px;
+    }
+  }
+
+  /* Teléfonos muy pequeños */
+  @media (max-width: 360px) {
+    .form-header h1 {
+      font-size: 18px;
+    }
+    .question-card {
+      padding: 14px 12px;
+    }
+    .btn {
+      font-size: 13px;
+      padding: 12px 12px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-container" id="app">
+
+  <!-- Header -->
+  <div class="form-header">
+    <h1>Cuéntanos sobre tu negocio</h1>
+    <p>Para poder ofrecerte la mejor estrategia digital, necesitamos conocer tu negocio a fondo. Este formulario nos ayudará a entender qué haces, a quién te diriges y qué necesitas. Tómate unos minutos para completarlo con la mayor información posible. ¡Cuanto más nos cuentes, mejor podremos ayudarte!</p>
+    <div class="time-badge">⏱ Tiempo estimado: 10-15 minutos</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrapper">
+    <div class="progress-info">
+      <span class="section-label" id="progressLabel">Sección 1 de 9</span>
+      <span id="progressPercent">11%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 11%"></div>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 1 ==================== -->
+  <div class="section active" data-section="1">
+    <div class="section-title-card">
+      <h2>📋 Datos de contacto</h2>
+      <p>Empecemos por lo básico para poder contactarte.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Nombre completo <span class="required">*</span></label>
+      <input type="text" name="nombre" required placeholder="Tu nombre y apellidos">
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Teléfono de contacto (con WhatsApp) <span class="required">*</span></label>
+      <input type="text" name="telefono" required placeholder="+34 600 000 000">
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Email <span class="required">*</span></label>
+      <input type="email" name="email" required placeholder="tu@email.com">
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Cargo o rol en el negocio</label>
+      <select name="cargo">
+        <option value="">Selecciona una opción</option>
+        <option>Propietario/a</option>
+        <option>Socio/a</option>
+        <option>Gerente / Director/a</option>
+        <option>Responsable de marketing</option>
+        <option>Otro</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 2 ==================== -->
+  <div class="section" data-section="2">
+    <div class="section-title-card">
+      <h2>🏢 Información del negocio</h2>
+      <p>Cuéntanos todo sobre tu negocio. Esto es fundamental para crear tu identidad digital.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Nombre del negocio / marca <span class="required">*</span></label>
+      <input type="text" name="nombre_negocio" required placeholder="Nombre comercial de tu negocio">
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿A qué se dedica tu negocio? Descríbelo con tus palabras <span class="required">*</span></label>
+      <div class="question-hint">Ejemplo: "Somos un centro de estética especializado en tratamientos faciales con tecnología coreana"</div>
+      <textarea name="descripcion_negocio" required placeholder="Describe tu negocio..."></textarea>
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Sector o industria <span class="required">*</span></label>
+      <select name="sector" required>
+        <option value="">Selecciona una opción</option>
+        <option>Belleza / Estética</option>
+        <option>Salud / Bienestar</option>
+        <option>Alimentación / Hostelería</option>
+        <option>Moda / Retail</option>
+        <option>Servicios profesionales</option>
+        <option>Educación / Formación</option>
+        <option>Fitness / Deporte</option>
+        <option>Tecnología</option>
+        <option>Inmobiliaria</option>
+        <option>Otro</option>
+      </select>
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes un local físico, trabajas online, o ambos?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="tipo_negocio" value="Local físico"> Local físico</label>
+        <label class="option-item"><input type="radio" name="tipo_negocio" value="Solo online"> Solo online</label>
+        <label class="option-item"><input type="radio" name="tipo_negocio" value="Ambos (local + online)"> Ambos (local + online)</label>
+        <label class="option-item"><input type="radio" name="tipo_negocio" value="A domicilio"> A domicilio</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Dirección del negocio (si tiene local físico)</label>
+      <input type="text" name="direccion" placeholder="Calle, número, ciudad...">
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Horario de atención al público</label>
+      <div class="question-hint">Ejemplo: "Lunes a viernes 10:00-20:00, sábados 10:00-14:00"</div>
+      <input type="text" name="horario" placeholder="Tu horario">
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 3 ==================== -->
+  <div class="section" data-section="3">
+    <div class="section-title-card">
+      <h2>🛍 Servicios y productos</h2>
+      <p>Necesitamos conocer en detalle qué ofreces para poder comunicarlo bien.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Enumera TODOS tus servicios o productos principales <span class="required">*</span></label>
+      <div class="question-hint">Sé lo más detallado/a posible. Ejemplo: "1. Taller facial con IA (gratuito), 2. Estudio nutricional (90€)..."</div>
+      <textarea name="servicios" required placeholder="Lista todos tus servicios o productos..."></textarea>
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Cuál es tu servicio o producto ESTRELLA? <span class="required">*</span></label>
+      <div class="question-hint">El que más vendes o del que más orgulloso/a estás</div>
+      <textarea name="producto_estrella" required placeholder="Describe tu producto o servicio estrella..."></textarea>
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes precios definidos? Si es así, indícalos junto a cada servicio</label>
+      <div class="question-hint">Si prefieres no compartirlos aquí, escribe "Lo hablamos en la reunión"</div>
+      <textarea name="precios" placeholder="Precios de tus servicios..."></textarea>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Qué te diferencia de tu competencia?</label>
+      <div class="question-hint">¿Qué haces tú que otros no?</div>
+      <textarea name="diferenciador" placeholder="Tu ventaja competitiva..."></textarea>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Ofreces algo gratuito o de prueba para atraer nuevos clientes?</label>
+      <div class="question-hint">Ejemplo: "Consulta inicial gratis" / "No, de momento no"</div>
+      <textarea name="gancho" placeholder="Tu oferta de captación..."></textarea>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 4 ==================== -->
+  <div class="section" data-section="4">
+    <div class="section-title-card">
+      <h2>🎯 Cliente ideal</h2>
+      <p>Conocer a tu cliente ideal nos permite crear mensajes que realmente conecten.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Quién es tu cliente ideal? Descríbelo <span class="required">*</span></label>
+      <div class="question-hint">Ejemplo: "Mujeres de 30-55 años, que viven en Alcobendas, interesadas en cuidarse la piel"</div>
+      <textarea name="cliente_ideal" required placeholder="Describe a tu cliente ideal..."></textarea>
+      <div class="error-msg">Este campo es obligatorio</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Rango de edad de tus clientes <span class="required">*</span></label>
+      <div class="option-group" data-required="true" data-name="edad">
+        <label class="option-item"><input type="checkbox" name="edad" value="18-24 años"> 18-24 años</label>
+        <label class="option-item"><input type="checkbox" name="edad" value="25-34 años"> 25-34 años</label>
+        <label class="option-item"><input type="checkbox" name="edad" value="35-44 años"> 35-44 años</label>
+        <label class="option-item"><input type="checkbox" name="edad" value="45-54 años"> 45-54 años</label>
+        <label class="option-item"><input type="checkbox" name="edad" value="55-64 años"> 55-64 años</label>
+        <label class="option-item"><input type="checkbox" name="edad" value="65+ años"> 65+ años</label>
+      </div>
+      <div class="error-msg">Selecciona al menos una opción</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tu cliente es principalmente...?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="genero_cliente" value="Mujeres"> Mujeres</label>
+        <label class="option-item"><input type="radio" name="genero_cliente" value="Hombres"> Hombres</label>
+        <label class="option-item"><input type="radio" name="genero_cliente" value="Ambos por igual"> Ambos por igual</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Zona geográfica de tus clientes</label>
+      <div class="question-hint">Ejemplo: "Alcobendas y alrededores" / "Todo Madrid" / "Online, toda España"</div>
+      <input type="text" name="zona" placeholder="Zona geográfica...">
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Qué problema o necesidad principal resuelves para tus clientes?</label>
+      <textarea name="problema_cliente" placeholder="El problema que resuelves..."></textarea>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 5 ==================== -->
+  <div class="section" data-section="5">
+    <div class="section-title-card">
+      <h2>🌐 Presencia digital actual</h2>
+      <p>Queremos saber de dónde partimos para construir tu estrategia.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes página web actualmente?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="tiene_web" value="Sí, y funciona bien"> Sí, y funciona bien</label>
+        <label class="option-item"><input type="radio" name="tiene_web" value="Sí, pero necesita mejorar"> Sí, pero necesita mejorar</label>
+        <label class="option-item"><input type="radio" name="tiene_web" value="Tengo una pero está desactualizada"> Tengo una pero está desactualizada</label>
+        <label class="option-item"><input type="radio" name="tiene_web" value="No tengo página web"> No tengo página web</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Si tienes web, indica la URL</label>
+      <input type="url" name="url_web" placeholder="https://www.tunegocio.com">
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes redes sociales? ¿Cuáles? <span class="required">*</span></label>
+      <div class="option-group" data-required="true" data-name="redes">
+        <label class="option-item"><input type="checkbox" name="redes" value="Instagram"> Instagram</label>
+        <label class="option-item"><input type="checkbox" name="redes" value="Facebook"> Facebook</label>
+        <label class="option-item"><input type="checkbox" name="redes" value="TikTok"> TikTok</label>
+        <label class="option-item"><input type="checkbox" name="redes" value="LinkedIn"> LinkedIn</label>
+        <label class="option-item"><input type="checkbox" name="redes" value="YouTube"> YouTube</label>
+        <label class="option-item"><input type="checkbox" name="redes" value="X (Twitter)"> X (Twitter)</label>
+        <label class="option-item"><input type="checkbox" name="redes" value="No tengo redes sociales"> No tengo redes sociales</label>
+      </div>
+      <div class="error-msg">Selecciona al menos una opción</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Indica las URLs o nombres de usuario de tus redes</label>
+      <div class="question-hint">Ejemplo: "Instagram: @micentro — Facebook: Mi Centro Bienestar"</div>
+      <textarea name="urls_redes" placeholder="Tus redes sociales..."></textarea>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Aparece tu negocio en buscador Google?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="gmb" value="Sí, aparece y está actualizado"> Sí, aparece y está actualizado</label>
+        <label class="option-item"><input type="radio" name="gmb" value="Sí, pero no lo gestiono"> Sí, pero no lo gestiono</label>
+        <label class="option-item"><input type="radio" name="gmb" value="No aparece / No sé cómo comprobarlo"> No aparece / No sé cómo comprobarlo</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Has hecho publicidad online antes?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="publicidad_previa" value="Sí, con buenos resultados"> Sí, con buenos resultados</label>
+        <label class="option-item"><input type="radio" name="publicidad_previa" value="Sí, pero no funcionó bien"> Sí, pero no funcionó bien</label>
+        <label class="option-item"><input type="radio" name="publicidad_previa" value="Lo intenté pero lo dejé"> Lo intenté pero lo dejé</label>
+        <label class="option-item"><input type="radio" name="publicidad_previa" value="Nunca he hecho publicidad online"> Nunca he hecho publicidad online</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Si has invertido en publicidad, ¿cuánto al mes aprox.?</label>
+      <select name="inversion_ads">
+        <option value="">Selecciona una opción</option>
+        <option>Menos de 100€</option>
+        <option>100€ - 300€</option>
+        <option>300€ - 500€</option>
+        <option>500€ - 1.000€</option>
+        <option>Más de 1.000€</option>
+        <option>No he invertido nunca</option>
+        <option>Prefiero no decirlo</option>
+      </select>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Usas alguna herramienta digital actualmente?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="checkbox" name="herramientas" value="WhatsApp Business"> WhatsApp Business</label>
+        <label class="option-item"><input type="checkbox" name="herramientas" value="Email marketing"> Mailchimp u otra de email marketing</label>
+        <label class="option-item"><input type="checkbox" name="herramientas" value="CRM"> CRM (gestión de clientes)</label>
+        <label class="option-item"><input type="checkbox" name="herramientas" value="Software de reservas"> Software de reservas/citas</label>
+        <label class="option-item"><input type="checkbox" name="herramientas" value="Canva"> Canva o herramienta de diseño</label>
+        <label class="option-item"><input type="checkbox" name="herramientas" value="Google Analytics"> Google Analytics</label>
+        <label class="option-item"><input type="checkbox" name="herramientas" value="Ninguna"> Ninguna</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 6 ==================== -->
+  <div class="section" data-section="6">
+    <div class="section-title-card">
+      <h2>🚀 Objetivos y expectativas</h2>
+      <p>Para diseñar la mejor estrategia, necesitamos entender qué quieres lograr.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Qué servicios te interesan? <span class="required">*</span></label>
+      <div class="option-group" data-required="true" data-name="servicios_interes">
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Creación de página web"> Creación de página web</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Agentes de IA"> Agentes de IA</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Meta Ads"> Publicidad en Meta (Facebook/Instagram Ads)</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Google Ads"> Publicidad en Google Ads</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="SEO"> SEO (posicionamiento en buscadores)</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Automatizaciones"> Automatizaciones (WhatsApp, email, chatbots)</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Google My Business"> Perfil de Google My Business</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Branding"> Branding / identidad visual</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Paquete completo"> Todo lo anterior / Paquete completo</label>
+        <label class="option-item"><input type="checkbox" name="servicios_interes" value="Necesito asesoramiento"> No estoy seguro/a, necesito asesoramiento</label>
+      </div>
+      <div class="error-msg">Selecciona al menos una opción</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Cuál es tu objetivo principal ahora mismo? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="objetivo" value="Conseguir más clientes"> Conseguir más clientes</label>
+        <label class="option-item"><input type="radio" name="objetivo" value="Darme a conocer en mi zona"> Darme a conocer en mi zona</label>
+        <label class="option-item"><input type="radio" name="objetivo" value="Vender más un producto/servicio"> Vender más un producto/servicio específico</label>
+        <label class="option-item"><input type="radio" name="objetivo" value="Profesionalizar mi imagen digital"> Profesionalizar mi imagen digital</label>
+        <label class="option-item"><input type="radio" name="objetivo" value="Automatizar procesos"> Automatizar procesos (citas, mensajes, seguimiento)</label>
+        <label class="option-item"><input type="radio" name="objetivo" value="Lanzar mi negocio desde cero"> Lanzar mi negocio desde cero</label>
+      </div>
+      <div class="error-msg">Selecciona una opción</div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes un presupuesto mensual estimado para marketing digital?</label>
+      <select name="presupuesto">
+        <option value="">Selecciona una opción</option>
+        <option>Menos de 200€/mes</option>
+        <option>200€ - 500€/mes</option>
+        <option>500€ - 1.000€/mes</option>
+        <option>1.000€ - 2.000€/mes</option>
+        <option>Más de 2.000€/mes</option>
+        <option>No tengo un presupuesto definido</option>
+        <option>Prefiero hablarlo en la reunión</option>
+      </select>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Cuándo quieres empezar?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="cuando" value="Lo antes posible"> Lo antes posible</label>
+        <label class="option-item"><input type="radio" name="cuando" value="En las próximas 2 semanas"> En las próximas 2 semanas</label>
+        <label class="option-item"><input type="radio" name="cuando" value="En 1 mes"> En 1 mes</label>
+        <label class="option-item"><input type="radio" name="cuando" value="Estoy explorando opciones"> Estoy explorando opciones, sin prisa</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 7 ==================== -->
+  <div class="section" data-section="7">
+    <div class="section-title-card">
+      <h2>📁 Material y recursos disponibles</h2>
+      <p>Esto nos ayuda a saber qué material tenemos para trabajar y qué necesitamos crear.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes logotipo profesional?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="logo" value="Sí, en buena calidad"> Sí, en buena calidad</label>
+        <label class="option-item"><input type="radio" name="logo" value="Sí, pero necesita mejorarse"> Sí, pero necesita mejorarse</label>
+        <label class="option-item"><input type="radio" name="logo" value="No tengo logotipo"> No tengo logotipo</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes fotos profesionales del negocio, productos o equipo?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="fotos" value="Sí, tengo buen material"> Sí, tengo buen material fotográfico</label>
+        <label class="option-item"><input type="radio" name="fotos" value="Tengo algunas no profesionales"> Tengo algunas fotos pero no son profesionales</label>
+        <label class="option-item"><input type="radio" name="fotos" value="No tengo fotos"> No tengo fotos</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes vídeos del negocio o de tus servicios?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="videos" value="Sí, profesionales"> Sí, profesionales</label>
+        <label class="option-item"><input type="radio" name="videos" value="Sí, pero caseros"> Sí, pero caseros</label>
+        <label class="option-item"><input type="radio" name="videos" value="No tengo vídeos"> No tengo vídeos</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes textos ya redactados sobre tu negocio?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="textos" value="Sí, bastante completos"> Sí, bastante completos</label>
+        <label class="option-item"><input type="radio" name="textos" value="Tengo algo básico"> Tengo algo básico</label>
+        <label class="option-item"><input type="radio" name="textos" value="No tengo nada escrito"> No tengo nada escrito</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes testimonios o reseñas de clientes?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="checkbox" name="testimonios" value="Sí, en Google"> Sí, en Google</label>
+        <label class="option-item"><input type="checkbox" name="testimonios" value="Sí, en redes sociales"> Sí, en redes sociales</label>
+        <label class="option-item"><input type="checkbox" name="testimonios" value="Sí, pero no publicados"> Sí, pero no publicados</label>
+        <label class="option-item"><input type="checkbox" name="testimonios" value="No tengo testimonios"> No tengo testimonios</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 8 ==================== -->
+  <div class="section" data-section="8">
+    <div class="section-title-card">
+      <h2>🔑 Accesos y datos técnicos</h2>
+      <p>Para trabajar en tu proyecto, necesitaremos acceso a algunas plataformas. No te preocupes, esto lo gestionaremos juntos de forma segura.</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes dominio web propio? (ej: www.tunegocio.com)</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="dominio" value="Sí"> Sí</label>
+        <label class="option-item"><input type="radio" name="dominio" value="No"> No</label>
+        <label class="option-item"><input type="radio" name="dominio" value="No sé qué es un dominio"> No sé qué es un dominio</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">Si tienes dominio, ¿dónde está contratado?</label>
+      <div class="question-hint">Ejemplo: "GoDaddy", "Hostinger", "1&1", "No lo sé"</div>
+      <input type="text" name="proveedor_dominio" placeholder="Proveedor del dominio...">
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes hosting (alojamiento web)?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="hosting" value="Sí"> Sí</label>
+        <label class="option-item"><input type="radio" name="hosting" value="No"> No</label>
+        <label class="option-item"><input type="radio" name="hosting" value="No sé"> No sé</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Puedes dar acceso a tu cuenta de Meta Business?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="acceso_meta" value="Sí"> Sí</label>
+        <label class="option-item"><input type="radio" name="acceso_meta" value="No tengo cuenta publicitaria"> No tengo cuenta publicitaria</label>
+        <label class="option-item"><input type="radio" name="acceso_meta" value="No sé cómo hacerlo"> No sé cómo hacerlo (te ayudamos)</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SECCIÓN 9 ==================== -->
+  <div class="section" data-section="9">
+    <div class="section-title-card">
+      <h2>💬 Comentarios adicionales</h2>
+      <p>¿Algo más que quieras contarnos?</p>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Hay algo importante sobre tu negocio que no te hayamos preguntado?</label>
+      <textarea name="comentarios" placeholder="Cuéntanos lo que quieras..."></textarea>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Tienes alguna referencia de webs o marcas que te gusten?</label>
+      <div class="question-hint">Pega URLs o nombres de marcas/negocios cuyo estilo te guste</div>
+      <textarea name="referencias" placeholder="URLs o nombres de marcas que te inspiren..."></textarea>
+    </div>
+
+    <div class="question-card">
+      <label class="question-label">¿Prefieres que te contactemos por...?</label>
+      <div class="option-group">
+        <label class="option-item"><input type="radio" name="canal_contacto" value="WhatsApp"> WhatsApp</label>
+        <label class="option-item"><input type="radio" name="canal_contacto" value="Llamada telefónica"> Llamada telefónica</label>
+        <label class="option-item"><input type="radio" name="canal_contacto" value="Email"> Email</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-buttons" id="navButtons">
+    <button class="btn btn-secondary" id="btnPrev" onclick="navigate(-1)" style="visibility:hidden">← Anterior</button>
+    <button class="btn btn-primary" id="btnNext" onclick="navigate(1)">Siguiente →</button>
+    <button class="btn btn-submit" id="btnSubmit" onclick="submitForm()" style="display:none">✓ Enviar formulario</button>
+  </div>
+
+  <!-- Confirmation -->
+  <div class="confirmation" id="confirmation">
+    <div class="check-icon">✓</div>
+    <h2>¡Gracias por completar el formulario!</h2>
+    <p>Hemos recibido tu información y en las próximas 24-48h nos pondremos en contacto contigo para agendar una reunión donde repasaremos todo juntos.</p>
+
+    <div class="summary-section" id="summarySection"></div>
+
+    <button class="btn btn-restart" onclick="restart()">↺ Volver a empezar</button>
+  </div>
+</div>
+
+<script>
+  let currentSection = 1;
+  const totalSections = 9;
+
+  const sectionNames = {
+    1: 'Datos de contacto',
+    2: 'Información del negocio',
+    3: 'Servicios y productos',
+    4: 'Cliente ideal',
+    5: 'Presencia digital actual',
+    6: 'Objetivos y expectativas',
+    7: 'Material y recursos',
+    8: 'Accesos técnicos',
+    9: 'Comentarios adicionales'
+  };
+
+  function updateProgress() {
+    const pct = Math.round((currentSection / totalSections) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPercent').textContent = pct + '%';
+    document.getElementById('progressLabel').textContent = `Sección ${currentSection} de ${totalSections} — ${sectionNames[currentSection]}`;
+  }
+
+  function validateSection(sectionNum) {
+    const section = document.querySelector(`.section[data-section="${sectionNum}"]`);
+    let valid = true;
+
+    // Text/email/select required
+    section.querySelectorAll('[required]').forEach(el => {
+      const card = el.closest('.question-card');
+      if (!el.value.trim()) {
+        card.classList.add('has-error');
+        valid = false;
+      } else {
+        card.classList.remove('has-error');
+      }
+    });
+
+    // Required checkbox groups
+    section.querySelectorAll('.option-group[data-required="true"]').forEach(group => {
+      const name = group.dataset.name;
+      const checked = group.querySelectorAll(`input[name="${name}"]:checked`);
+      const card = group.closest('.question-card');
+      if (checked.length === 0) {
+        card.classList.add('has-error');
+        valid = false;
+      } else {
+        card.classList.remove('has-error');
+      }
+    });
+
+    // Required radio (objetivo)
+    if (sectionNum === 6) {
+      const objetivo = section.querySelector('input[name="objetivo"]:checked');
+      const card = section.querySelectorAll('.question-card')[1];
+      if (!objetivo) {
+        card.classList.add('has-error');
+        valid = false;
+      } else {
+        card.classList.remove('has-error');
+      }
+    }
+
+    return valid;
+  }
+
+  function navigate(dir) {
+    if (dir === 1 && !validateSection(currentSection)) {
+      const firstError = document.querySelector('.section.active .has-error');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    document.querySelector(`.section[data-section="${currentSection}"]`).classList.remove('active');
+    currentSection += dir;
+    document.querySelector(`.section[data-section="${currentSection}"]`).classList.add('active');
+
+    // Button visibility
+    document.getElementById('btnPrev').style.visibility = currentSection === 1 ? 'hidden' : 'visible';
+    if (currentSection === totalSections) {
+      document.getElementById('btnNext').style.display = 'none';
+      document.getElementById('btnSubmit').style.display = 'inline-flex';
+    } else {
+      document.getElementById('btnNext').style.display = 'inline-flex';
+      document.getElementById('btnSubmit').style.display = 'none';
+    }
+
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function collectData() {
+    const data = {};
+    // All text/email/url inputs
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="url"]').forEach(el => {
+      if (el.name) data[el.name] = el.value;
+    });
+    // Textareas
+    document.querySelectorAll('textarea').forEach(el => {
+      if (el.name) data[el.name] = el.value;
+    });
+    // Selects
+    document.querySelectorAll('select').forEach(el => {
+      if (el.name) data[el.name] = el.value;
+    });
+    // Radios
+    document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+      data[el.name] = el.value;
+    });
+    // Checkboxes
+    const checkboxGroups = {};
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(el => {
+      if (!checkboxGroups[el.name]) checkboxGroups[el.name] = [];
+      checkboxGroups[el.name].push(el.value);
+    });
+    Object.entries(checkboxGroups).forEach(([k, v]) => { data[k] = v.join(', '); });
+
+    return data;
+  }
+
+  function submitForm() {
+    if (!validateSection(currentSection)) {
+      const firstError = document.querySelector('.section.active .has-error');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const data = collectData();
+
+    // Hide form elements
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('navButtons').style.display = 'none';
+    document.querySelector('.progress-wrapper').style.display = 'none';
+
+    // Build summary
+    const fieldLabels = {
+      nombre: 'Nombre completo', telefono: 'Teléfono', email: 'Email', cargo: 'Cargo',
+      nombre_negocio: 'Nombre del negocio', descripcion_negocio: 'Descripción', sector: 'Sector',
+      tipo_negocio: 'Tipo', direccion: 'Dirección', horario: 'Horario',
+      servicios: 'Servicios/productos', producto_estrella: 'Producto estrella', precios: 'Precios', diferenciador: 'Diferenciador', gancho: 'Oferta de captación',
+      cliente_ideal: 'Cliente ideal', edad: 'Rango edad', genero_cliente: 'Género', zona: 'Zona geográfica', problema_cliente: 'Problema que resuelve',
+      tiene_web: 'Web actual', url_web: 'URL web', redes: 'Redes sociales', urls_redes: 'URLs redes', gmb: 'Google Buscador', publicidad_previa: 'Publicidad previa', inversion_ads: 'Inversión en ads', herramientas: 'Herramientas',
+      servicios_interes: 'Servicios interesados', objetivo: 'Objetivo principal', presupuesto: 'Presupuesto', cuando: 'Cuándo empezar',
+      logo: 'Logotipo', fotos: 'Fotos', videos: 'Vídeos', textos: 'Textos', testimonios: 'Testimonios',
+      dominio: 'Dominio web', proveedor_dominio: 'Proveedor dominio', hosting: 'Hosting', acceso_meta: 'Acceso Meta Business',
+      comentarios: 'Comentarios', referencias: 'Referencias', canal_contacto: 'Canal de contacto'
+    };
+
+    const sectionFields = {
+      'Datos de contacto': ['nombre','telefono','email','cargo'],
+      'Información del negocio': ['nombre_negocio','descripcion_negocio','sector','tipo_negocio','direccion','horario'],
+      'Servicios y productos': ['servicios','producto_estrella','precios','diferenciador','gancho'],
+      'Cliente ideal': ['cliente_ideal','edad','genero_cliente','zona','problema_cliente'],
+      'Presencia digital': ['tiene_web','url_web','redes','urls_redes','gmb','publicidad_previa','inversion_ads','herramientas'],
+      'Objetivos': ['servicios_interes','objetivo','presupuesto','cuando'],
+      'Material disponible': ['logo','fotos','videos','textos','testimonios'],
+      'Accesos técnicos': ['dominio','proveedor_dominio','hosting','acceso_meta'],
+      'Comentarios': ['comentarios','referencias','canal_contacto']
+    };
+
+    let summaryHTML = '<h3>📋 Resumen de tus respuestas</h3>';
+    Object.entries(sectionFields).forEach(([section, fields]) => {
+      summaryHTML += `<div class="summary-group"><h4>${section}</h4>`;
+      fields.forEach(f => {
+        const label = fieldLabels[f] || f;
+        const val = data[f] || '';
+        summaryHTML += `<div class="summary-item"><span class="s-label">${label}</span><span class="s-value ${!val ? 'empty' : ''}">${val || 'Sin respuesta'}</span></div>`;
+      });
+      summaryHTML += '</div>';
+    });
+
+    document.getElementById('summarySection').innerHTML = summaryHTML;
+    document.getElementById('confirmation').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function restart() {
+    // Reset all fields
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="url"], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => el.checked = false);
+    document.querySelectorAll('.has-error').forEach(el => el.classList.remove('has-error'));
+
+    // Reset navigation
+    currentSection = 1;
+    document.getElementById('confirmation').classList.remove('active');
+    document.querySelector('.section[data-section="1"]').classList.add('active');
+    document.getElementById('navButtons').style.display = 'flex';
+    document.querySelector('.progress-wrapper').style.display = 'block';
+    document.getElementById('btnPrev').style.visibility = 'hidden';
+    document.getElementById('btnNext').style.display = 'inline-flex';
+    document.getElementById('btnSubmit').style.display = 'none';
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Remove error on input
+  document.addEventListener('input', e => {
+    const card = e.target.closest('.question-card');
+    if (card) card.classList.remove('has-error');
+  });
+  document.addEventListener('change', e => {
+    const card = e.target.closest('.question-card');
+    if (card) card.classList.remove('has-error');
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
